@@ -1,0 +1,9 @@
+/node_modules
+*.prod
+/env
+/.env
+.env
+/dist
+/local.env
+src/.env
+src/local.env
