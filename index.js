@@ -26,7 +26,7 @@ app.use(cors({
 /**
  * Routes
 */
-app.get('/',(req, res) => {
+app.get('/',(_, res) => {
     res.json("Project working")
    
 });
