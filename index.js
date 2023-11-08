@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const { generateTable } = require('./services/generatetable');
+const { staxAI } = require('./services/staxAI');
+const { tegoCyberPdf } = require('./services/tegoCyberPdf');
 const PORT = process.env.PORT || 8080
 
 
@@ -32,6 +34,11 @@ app.get('/',(_, res) => {
 });
 
 app.post("/create-table", generateTable)
+
+app.get("/stax-ai", staxAI)
+
+
+app.get("/tego-cyber-pdf", tegoCyberPdf)
 
 
 app.listen(PORT, () => {
