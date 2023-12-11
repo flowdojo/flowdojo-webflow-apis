@@ -2,6 +2,7 @@ require('dotenv').config()
 const axios = require('axios');
 
 const generateTable = async (req, res) => {
+    
     try {
         
         const { text : rawTableText } = req.body;        

@@ -4,6 +4,8 @@ const cors = require('cors');
 const { generateTable } = require('./services/generatetable');
 const { staxAI } = require('./services/staxAI');
 const { tegoCyberPdf } = require('./services/tegoCyberPdf');
+const { generateHashTagByContext } = require('./services/generateHashTagByContext');
+const { generateHashTagByHashtag } = require("./services/generateHashTagByHashtag")
 const PORT = process.env.PORT || 8080
 
 
@@ -40,6 +42,10 @@ app.get("/stax-ai", staxAI)
 
 app.get("/tego-cyber-pdf", tegoCyberPdf)
 
+
+app.post("/generate-hashtag-by-context", generateHashTagByContext)
+
+app.post("/generate-hashtag-by-hashtag", generateHashTagByHashtag)
 
 app.listen(PORT, () => {
     console.log("Working on PORT ", PORT);
