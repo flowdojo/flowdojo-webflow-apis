@@ -24,9 +24,9 @@ const generateHashTagByHashtag = async (req, res) =>
       Please send me some instagram hashtag that are related to this hashtag - ${userInput}
       The response should be in the format of hashtag name and the number of times it has been used on Instagram, similar to the following:
 
-      #helloworld 16500000
-      #heyy 1200000
-      #something amazing 3700000
+      #helloworld 16521323
+      #heyy 13292183
+      #something 38293484
       
       Don't include any text, answer in your reply. just the hashtags and the number of times it has been used. Give me atleast 15 such responses. Also sort it based on the number of times it has been used.
     `
