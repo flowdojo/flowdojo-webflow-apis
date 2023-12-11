@@ -29,7 +29,7 @@ const generateHashTagByContext = async (req, res) =>
             #heyy 1200000
             #something amazing 3700000
             
-            Don't include any text, answer in your reply. just the hashtags and the number of times it has been used. Give me atleast 15 such responses
+            Don't include any text, answer in your reply. just the hashtags and the number of times it has been used. Give me atleast 15 such responses. Also sort it based on the number of times it has been used.
         `
         const payload = {
             prompt,
