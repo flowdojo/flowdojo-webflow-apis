@@ -4,7 +4,7 @@ const axios = require('axios');
 
 const generateHashTagByContext = async (req, res) =>
 {
-    const API_URL = `https://api.openai.com/v1/engines/text-davinci-003/completions`
+    const API_URL = `https://api.openai.com/v1/chat/completions`
     try {
         const { userInput } = req.body
 
@@ -32,20 +32,24 @@ const generateHashTagByContext = async (req, res) =>
             Don't include any text, answer in your reply. just the hashtags and the number of times it has been used. Give me atleast 15 such responses. Also sort it based on the number of times it has been used.
         `
         const payload = {
-            prompt,
+            "model": "gpt-3.5-turbo",
             temperature: 0.2,
-            max_tokens: 3800,
             n: 1,
+            "messages": [
+                {
+                "role": "assistant",
+                "content": `${prompt}`
+                },
+            ]
         }
         const body = JSON.stringify(payload);
 
         try {
             const { data } = await axios.post(API_URL, body, requestOptions);
-            console.log("data ", data)
-            const responseText = data.choices[0].text.trim();
+            const responseText = data.choices[0].message.content;
             return res.status(200).json({
-                success : true,
-                responseText
+              success : true,
+              responseText
             });
 
         } catch (err) {
