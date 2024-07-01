@@ -7,7 +7,7 @@ const { tegoCyberPdf } = require('./services/tegoCyberPdf');
 const { generateHashTagByContext } = require('./services/generateHashTagByContext');
 const { generateHashTagByHashtag } = require("./services/generateHashTagByHashtag")
 const PORT = process.env.PORT || 8080
-
+const { evisortRouter } = require('./routes/evisort.routes');
 
 const app = express();
 
@@ -30,10 +30,10 @@ app.use(cors({
 /**
  * Routes
 */
-app.get('/',(_, res) => {
-    res.json("Project working")
-   
-});
+
+app.get("/", (_, res) => {
+    res.send("Project Working")
+})
 
 app.post("/create-table", generateTable)
 
@@ -46,6 +46,9 @@ app.get("/tego-cyber-pdf", tegoCyberPdf)
 app.post("/generate-hashtag-by-context", generateHashTagByContext)
 
 app.post("/generate-hashtag-by-hashtag", generateHashTagByHashtag)
+
+
+app.use("/evisort", evisortRouter)
 
 app.listen(PORT, () => {
     console.log("Working on PORT ", PORT);
