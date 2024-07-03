@@ -10,4 +10,4 @@ evisortRouter.get("/documents", evisortTokenMiddleware, getAllDocuments)
 evisortRouter.get("/documents/download/:id", evisortTokenMiddleware, downloadDocument)
 
 
-evisortRouter.get("generate-token", getNewEvisortToken)
+evisortRouter.get("/generate-token", getNewEvisortToken)

@@ -18,6 +18,7 @@ export const getNewEvisortToken = async (req : Request, res : Response) => {
     const { token } = await resp.json();
     
     res.status(200).json({
+      success : true,
       token
     })
     
@@ -25,6 +26,7 @@ export const getNewEvisortToken = async (req : Request, res : Response) => {
     
     console.log({ error })
     res.status(400).json({
+      success : false,
       error
     })
   }
