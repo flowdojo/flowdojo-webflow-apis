@@ -2,6 +2,7 @@
   "name": "table-generator-backend",
   "version": "1.0.0",
   "description": "express server for table generator",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.ts",
