@@ -1,33 +1,21 @@
-import { Request ,Response } from "express";
+import { Request, Response } from "express";
+import { getTokenFromEvisortAPI } from "./utils";
 
-export const getNewEvisortToken = async (req : Request, res : Response) => {
-  const endpointUrl = "https://api.evisort.com/v1/auth/token";
-
+export const getNewEvisortToken = async (_: Request, res: Response) => {
   try {
+    const { success, message, token } = await getTokenFromEvisortAPI();
 
-    const API_KEY = process.env.EVISORT_API_KEY
+    if (!success) throw new Error(message);
 
-    const resp = await fetch(endpointUrl, {
-      method : "POST",
-      //@ts-ignore
-      headers : {
-        "EVISORT-API-KEY": API_KEY,
-      }
-    });
-
-    const { token } = await resp.json();
-    
     res.status(200).json({
-      success : true,
-      token
-    })
-    
+      success: true,
+      token,
+    });
   } catch (error) {
-    
-    console.log({ error })
+    console.log({ error });
     res.status(400).json({
-      success : false,
-      error
-    })
+      success: false,
+      error,
+    });
   }
-}
+};
