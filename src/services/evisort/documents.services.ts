@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getTokenFromHeader, handleError } from "../../utils";
+import { handleError } from "../../utils";
 import "dotenv/config";
 
 /**
@@ -10,12 +10,15 @@ import { getTokenFromEvisortAPI } from "./utils";
 
 let cachedEvisortData = {};
 
+let existingToken: string = "";
+
 cron
   .schedule("0 * * * *", async () => {
     console.log("running every hour");
 
     const { success, message, token } = await getTokenFromEvisortAPI();
 
+    existingToken = token;
     if (!success) return;
 
     const endpoint =
@@ -52,21 +55,42 @@ export const getAllDocuments = async (req: Request, res: Response) => {
     "https://api.evisort.com/v1/documents?page=1&pageSize=100&modifiedSince=2024-05-22T10:41:02.577Z&includeClauses=true";
 
   try {
-    const token = getTokenFromHeader(req) as string;
+    let authToken: string = "";
+
+    if (existingToken) {
+      authToken = existingToken;
+    } else {
+      const { success, message, token } = await getTokenFromEvisortAPI();
+      if (!success) return;
+      existingToken = token;
+      authToken = token;
+    }
 
     const resp = await fetch(endpoint, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${authToken}`,
       },
     });
 
-    const data = await resp.json();
+    let data = await resp.json();
 
     if (data?.detail && data.detail.toLowerCase().includes("token")) {
       // means token related issue
-      throw new Error("Token Expired");
+      const { success, message, token } = await getTokenFromEvisortAPI();
+      if (!success) return;
+      existingToken = token;
+      authToken = token;
+
+      const resp = await fetch(endpoint, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      data = await resp.json();
     }
 
+    cachedEvisortData = { ...data };
     res.status(200).json({
       success: true,
       data,
@@ -81,15 +105,33 @@ export const downloadDocument = async (req: Request, res: Response) => {
   const endpoint = `https://api.evisort.com/v1/documents/${idValue}/content`;
 
   try {
-    const token = getTokenFromHeader(req);
-    const resp = await fetch(endpoint, {
+    let authToken: string = "";
+
+    if (existingToken) {
+      authToken = existingToken;
+    } else {
+      const { success, message, token } = await getTokenFromEvisortAPI();
+      if (!success) return;
+      authToken = token;
+      existingToken = token;
+    }
+
+    let resp = await fetch(endpoint, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${authToken}`,
       },
     });
 
     if (!resp.ok) {
-      throw new Error("Something went wrong");
+      // probably token related issue
+      const { success, message, token } = await getTokenFromEvisortAPI();
+      existingToken = token;
+      // re assigning resp
+      resp = await fetch(endpoint, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
     }
 
     res.status(200).json({
