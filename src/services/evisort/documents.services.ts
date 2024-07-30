@@ -21,7 +21,7 @@ cron
     existingToken = token;
     if (!success) return;
 
-    const endpoint = "https://api.evisort.com/v1/search?page=1&pageSize=100";
+    const endpoint = "https://api.evisort.com/v1/search?page=1&pageSize=200";
 
     const resp = await fetch(endpoint, {
       method: "POST",
@@ -66,7 +66,7 @@ export const getAllDocuments = async (req: Request, res: Response) => {
     });
   }
 
-  const endpoint = "https://api.evisort.com/v1/search?page=1&pageSize=100";
+  const endpoint = "https://api.evisort.com/v1/search?page=1&pageSize=200";
 
   try {
     let authToken: string = "";
@@ -182,7 +182,7 @@ export const downloadDocument = async (req: Request, res: Response) => {
 
 
 export const getDownloadableDocuments = async (req: Request, res: Response) => {
-  const endpoint = `https://api.evisort.com/v1/search?page=1&pageSize=100`;
+  const endpoint = `https://api.evisort.com/v1/search?page=1&pageSize=200`;
 
 
   try {
