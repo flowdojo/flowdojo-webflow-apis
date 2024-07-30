@@ -21,13 +21,23 @@ cron
     existingToken = token;
     if (!success) return;
 
-    const endpoint =
-      "https://api.evisort.com/v1/documents?page=1&pageSize=100&modifiedSince=2024-05-22T10:41:02.577Z&includeClauses=true";
+    const endpoint = "https://api.evisort.com/v1/search?page=1&pageSize=100";
 
     const resp = await fetch(endpoint, {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        query: [
+          {
+            type: "field",
+            name: "Document Type",
+            filter: "equals",
+            terms: "Main Contract",
+          },
+        ],
+      }),
     });
 
     const data = await resp.json();
@@ -51,8 +61,7 @@ export const getAllDocuments = async (req: Request, res: Response) => {
     });
   }
 
-  const endpoint =
-    "https://api.evisort.com/v1/documents?page=1&pageSize=100&modifiedSince=2024-05-22T10:41:02.577Z&includeClauses=true";
+  const endpoint = "https://api.evisort.com/v1/search?page=1&pageSize=100";
 
   try {
     let authToken: string = "";
@@ -67,9 +76,20 @@ export const getAllDocuments = async (req: Request, res: Response) => {
     }
 
     const resp = await fetch(endpoint, {
+      method: "POST",
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
+      body: JSON.stringify({
+        query: [
+          {
+            type: "field",
+            name: "Document Type",
+            filter: "equals",
+            terms: "Main Contract",
+          },
+        ],
+      }),
     });
 
     let data = await resp.json();
@@ -82,9 +102,20 @@ export const getAllDocuments = async (req: Request, res: Response) => {
       authToken = token;
 
       const resp = await fetch(endpoint, {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
+        body: JSON.stringify({
+          query: [
+            {
+              type: "field",
+              name: "Document Type",
+              filter: "equals",
+              terms: "Main Contract",
+            },
+          ],
+        }),
       });
 
       data = await resp.json();
