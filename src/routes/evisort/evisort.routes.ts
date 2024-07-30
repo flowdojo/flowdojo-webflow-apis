@@ -11,9 +11,9 @@ import cors from "cors";
 import { bespokeWhitelistedDomainsOptions } from "../../constants";
 import { handlDomainWhitelistErrorMiddlware } from "../../services/middleware";
 
-evisortRouter.use(cors(bespokeWhitelistedDomainsOptions));
+// evisortRouter.use(cors(bespokeWhitelistedDomainsOptions));
 
-evisortRouter.use(handlDomainWhitelistErrorMiddlware);
+// evisortRouter.use(handlDomainWhitelistErrorMiddlware);
 
 evisortRouter.get("/documents", getAllDocuments);
 

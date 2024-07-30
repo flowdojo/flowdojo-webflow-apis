@@ -27,18 +27,23 @@ cron
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
       },
+
       body: JSON.stringify({
         query: [
           {
             type: "field",
             name: "Document Type",
             filter: "equals",
-            terms: "Main Contract",
-          },
-        ],
-      }),
+            terms: "Main Contract"
+          }
+        ]
+      })
     });
+
+    console.log({ resp });
+
 
     const data = await resp.json();
 
@@ -79,6 +84,7 @@ export const getAllDocuments = async (req: Request, res: Response) => {
       method: "POST",
       headers: {
         Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         query: [
@@ -87,9 +93,9 @@ export const getAllDocuments = async (req: Request, res: Response) => {
             name: "Document Type",
             filter: "equals",
             terms: "Main Contract",
-          },
-        ],
-      }),
+          }
+        ]
+      })
     });
 
     let data = await resp.json();
