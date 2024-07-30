@@ -179,3 +179,79 @@ export const downloadDocument = async (req: Request, res: Response) => {
     handleError(error, res);
   }
 };
+
+
+export const getDownloadableDocuments = async (req: Request, res: Response) => {
+  const endpoint = `https://api.evisort.com/v1/search?page=1&pageSize=100`;
+
+
+  try {
+    const contractId = req.query.contractId;
+    if (!contractId) throw new Error("No Contract Id")
+
+    let authToken: string = "";
+
+    if (existingToken) {
+      authToken = existingToken;
+    } else {
+      const { success, message, token } = await getTokenFromEvisortAPI();
+      if (!success) return;
+      existingToken = token;
+      authToken = token;
+    }
+
+    const resp = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "query": [
+          {
+            "type": "field",
+            "name": "Main contract Evisort ID",
+            "filter": "containstext",
+            "terms": `${contractId}`
+          }
+        ]
+      })
+    });
+
+    let data = await resp.json();
+
+    if (data?.detail && data.detail.toLowerCase().includes("token")) {
+      // means token related issue
+      const { success, message, token } = await getTokenFromEvisortAPI();
+      if (!success) return;
+      existingToken = token;
+      authToken = token;
+
+      const resp = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          "query": [
+            {
+              "type": "field",
+              "name": "Main contract Evisort ID",
+              "filter": "containstext",
+              "terms": `${contractId}`
+            }
+          ]
+        }),
+      });
+
+      data = await resp.json();
+    }
+
+    res.status(200).json({
+      success: true,
+      documents: data.documents,
+    });
+  } catch (e: unknown) {
+    handleError(e, res);
+  }
+}

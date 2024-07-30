@@ -3,6 +3,7 @@ import {
   getAllDocuments,
   downloadDocument,
   getNewEvisortToken,
+  getDownloadableDocuments,
 } from "../../services";
 
 export const evisortRouter = Router();
@@ -21,3 +22,5 @@ evisortRouter.get("/documents", getAllDocuments);
 evisortRouter.get("/documents/download/:id", downloadDocument);
 
 evisortRouter.get("/generate-token", getNewEvisortToken);
+
+evisortRouter.get("/downloadable-documents", getDownloadableDocuments)
