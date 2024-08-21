@@ -7,6 +7,7 @@ import "dotenv/config";
  */
 import cron from "node-cron";
 import { getTokenFromEvisortAPI } from "./utils";
+import algoliasearch from "algoliasearch";
 
 let cachedEvisortData = {};
 
@@ -42,9 +43,6 @@ cron
       })
     });
 
-    console.log({ resp });
-
-
     const data = await resp.json();
 
     if (data?.detail && data.detail.toLowerCase().includes("token")) {
@@ -52,7 +50,31 @@ cron
       return;
     }
 
-    cachedEvisortData = { ...data };
+
+    try {
+      // upload it to algolia search 
+      const client = algoliasearch(
+        "THRHMY2CQO",
+        "0ddc1433c8bda181cc62371747cb1686"
+      );
+
+      const index = client.initIndex("evisort_docs");
+
+      const records = data.documents
+      records.forEach((obj: any) => {
+        delete obj.provisions
+      })
+
+      const savedObjectIds = await index.replaceAllObjects(records, { autoGenerateObjectIDIfNotExist: true })
+
+      console.log({ savedObjectIds });
+
+
+      cachedEvisortData = { ...data };
+    } catch (error) {
+      console.log({ error });
+
+    }
   })
   .now();
 

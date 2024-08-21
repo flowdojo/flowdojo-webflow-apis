@@ -9,22 +9,17 @@ export const fetchSearchResults = async (searchTerm: string, numOfResults = 100)
   const CUSTOM_SEARCH_ENGINE_ID = process.env.CUSTOM_SEARCH_ENGINE_ID;
   const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY
 
-
-  console.log({ CUSTOM_SEARCH_ENGINE_ID, GOOGLE_API_KEY })
-
-
-
   const customSearch = google.customsearch("v1");
 
   let startIndex = 1;
   let results: string[] = [];
 
-  while (results.length < numOfResults) {
+  while (results.length <= numOfResults) {
     console.log("loop start");
 
     const res = await customSearch.cse.list({
       cx: CUSTOM_SEARCH_ENGINE_ID,
-      q: searchTerm,
+      q: searchTerm.trim(),
       auth: GOOGLE_API_KEY,
       num: 10, // Google API returns a maximum of 10 results per request
       start: startIndex,
@@ -36,7 +31,7 @@ export const fetchSearchResults = async (searchTerm: string, numOfResults = 100)
     } else {
       break;
     }
-    await new Promise((resolve) => setTimeout(resolve));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 
   return results;
@@ -70,4 +65,28 @@ export const checkIfScriptPresentInSite = async (siteUrl: string) => {
   } catch (error) {
     return false;
   }
+}
+
+
+
+export const removeDuplicateUrls = (urls: string[]): string[] => {
+  const seenDomains = new Set();
+  return urls.filter(url => {
+    const domain = getDomain(url);
+    if (seenDomains.has(domain)) {
+      return false;
+    } else {
+      seenDomains.add(domain);
+      return true;
+    }
+  });
+}
+
+
+
+function getDomain(url: string) {
+
+  if (url === "") return ""
+  const urlObj = new URL(url);
+  return urlObj.hostname;
 }
