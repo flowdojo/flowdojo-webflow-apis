@@ -1,7 +1,8 @@
 import express from "express";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 import bodyParser from "body-parser";
 import "dotenv/config";
+import routes from "./routes";
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -11,7 +12,6 @@ app.use(express.json());
 
 app.use(cors());
 
-import routes from "./routes";
 
 app.get("/", (_, res) => {
   res.json(`Project working on PORT ${PORT}`);
