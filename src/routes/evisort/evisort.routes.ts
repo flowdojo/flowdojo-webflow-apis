@@ -8,9 +8,9 @@ import {
 
 export const evisortRouter = Router();
 
-import cors from "cors";
-import { bespokeWhitelistedDomainsOptions } from "../../constants";
-import { handlDomainWhitelistErrorMiddlware } from "../../services/middleware";
+// import cors from "cors";
+// import { bespokeWhitelistedDomainsOptions } from "../../constants";
+// import { handlDomainWhitelistErrorMiddlware } from "../../services/middleware";
 
 // evisortRouter.use(cors(bespokeWhitelistedDomainsOptions));
 
