@@ -1,5 +1,5 @@
 import { Response, Router } from "express";
-import { sendOtp } from "../../services/britannia/otp.services";
+import { sendOtp, verifyOtp } from "../../services/britannia/otp.services";
 
 export const britanniaRouter = Router()
 
@@ -11,4 +11,4 @@ britanniaRouter.get("/", (_, res : Response) => {
 
 
 britanniaRouter.post("/send-otp", sendOtp)
-britanniaRouter.post("/verify-otp", sendOtp)
+britanniaRouter.post("/verify-otp", verifyOtp)
