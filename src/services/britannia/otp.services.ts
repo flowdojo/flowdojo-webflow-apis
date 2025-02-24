@@ -2,7 +2,7 @@ import axios from "axios";
 import { Request, Response } from "express";
 
 const API_KEY = process.env.MTALKZ_API_KEY
-const SENDER_ID = process.env.MTALKS_SENDER_IT
+const SENDER_ID = process.env.MTALKZ_SENDER_IT
 
 
 export const sendOtp = async (req : Request, res : Response) => {
